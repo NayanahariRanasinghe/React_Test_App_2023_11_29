@@ -18,9 +18,9 @@ class App extends React.Component {
   render(){
     return (<Router history={history}>
       <Switch>
-        <Route path="/ShowDetails"><ShowDetails /></Route>
-        <Route path="/AddDetailsForm"><AddDetailsForm isNewForm={true} userDetailsList={null}/></Route>
-        <Route exact path="/" ><Login /></Route>
+        {/* <Route path="/ShowDetails"><ShowDetails /></Route> */}
+        <Route exact path="/" ><AddDetailsForm isNewForm={true} userDetailsList={null}/></Route>
+        {/* <Route exact path="/" ><Login /></Route> */}
       </Switch></Router>
     );
   }

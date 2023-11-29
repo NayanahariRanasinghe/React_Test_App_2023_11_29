@@ -7,7 +7,7 @@ const userDetails = [
   { id: 2, title: 'Last Name', value: 'Perera' },
   { id: 3, title: 'Date of Birth', value: '1995-02-01' },
   { id: 4, title: 'Age', value: '28' },
-  { id: 5, title: 'Language', value: 'sinhala' },
+  { id: 5, title: 'Language', value: 'Sinhala' },
   { id: 6, title: 'Gender', value: 'Male' },
   { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
   { id: 8, title: 'Telephone', value: '0710000000' }
