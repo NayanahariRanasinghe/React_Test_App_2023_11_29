@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { withRouter } from "react-router-dom";
-import { Row } from 'react-bootstrap';
+import { withRouter,useHistory,useLocation } from "react-router-dom";
+import { Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -12,12 +12,17 @@ const formSyles = {
 }
 
 
-function AddDetailsForm({ isNewForm, userDetailsList }) {
+function AddDetailsForm() {
 
+  const history=useHistory();
+  const location=useLocation();
   const [passUserDetails, setPassUserDetails] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedDOB, setSelectedDOB] = useState(null);
+  const [age, setAge] = useState(null);
   const [email, setEmail] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -71,15 +76,75 @@ function AddDetailsForm({ isNewForm, userDetailsList }) {
     }
   }
 
+  const getFirstName=(details)=>{
+    if(details && details!==null){
+      let name = details.find(a=>a.id===1);
+      if(name){
+        setFirstName(name.nalue);
+      }
+    }
+  }
+
+  const getLastName=(details)=>{
+    if(details && details!==null){
+      let name = details.find(a=>a.id===2);
+      if(name){
+        setLastName(name.nalue);
+      }
+    }
+  }
+
+  const getDOB=(details)=>{
+    if(details && details!==null){
+      let dob = details.find(a=>a.id===3);
+      if(dob){
+        setSelectedDOB(new Date(dob.value));
+      }
+    }
+  }
+
+  const getAge=(details)=>{
+    if(details && details!==null){
+      let age = details.find(a=>a.id===4);
+      if(age){
+        setAge(age.value);
+      }
+
+      let emailPass = details.find(a=>a.id===7);
+      if(emailPass){
+        setEmail(emailPass.value);
+      }
+
+      let tele = details.find(a=>a.id===8);
+      if(tele){
+        setPhoneNumber(tele.value);
+      }
+    }
+  }
+
   useEffect(() => {
+    const isNewForm = location.state?.isNewForm;
+    const userDetailsList = location.state?.userDetailsList;
     console.log('isNewForm:-', isNewForm);
     console.log('userDetailsList:-', userDetailsList);
     if (userDetailsList !== null) {
       setPassUserDetails(userDetailsList);
       getSelectedLanguage(userDetailsList);
       getSelectedGender(userDetailsList);
+      getFirstName(userDetailsList);
+      getLastName(userDetailsList);
+      getDOB(userDetailsList);
+      getAge(userDetailsList);
     }
-  }, [isNewForm, userDetailsList])
+  }, []);
+
+  const onGoBack=()=>{
+    history.goBack();
+  }
+
+  const onSubmit=()=>{
+    history.push('/ShowDetails');
+  }
 
   return (
     <div>
@@ -87,13 +152,13 @@ function AddDetailsForm({ isNewForm, userDetailsList }) {
         style={formSyles.rowStyle}
       >
         <h5>First Name</h5>
-        <input name='firstName' onChange={(e) => { console.log(e.target.value); }} />
+        <input name='firstName' value={firstName} onChange={(e) => { console.log(e.target.value); setFirstName(e.target.value); }} />
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Last Name</h5>
-        <input name='lastName' onChange={(e) => { console.log(e.target.value); }} />
+        <input name='lastName' value={lastName} onChange={(e) => { console.log(e.target.value); setLastName(e.target.value);}} />
       </Row>
       <Row
         style={formSyles.rowStyle}
@@ -114,7 +179,7 @@ function AddDetailsForm({ isNewForm, userDetailsList }) {
         style={formSyles.rowStyle}
       >
         <h5>Age</h5>
-        <input name='age' inputMode='numeric' onChange={(e) => { console.log(e.target.value); }} />
+        <input name='age' value={age} inputMode='numeric' onChange={(e) => { console.log(e.target.value); setAge(e.target.value)}} />
       </Row>
       <Row
         style={formSyles.rowStyle}
@@ -135,7 +200,7 @@ function AddDetailsForm({ isNewForm, userDetailsList }) {
         style={formSyles.rowStyle}
       >
         <h5>Email</h5>
-        <input name='email' onChange={(e) => { console.log(e.target.value); handleEmailChange(e); }} />
+        <input name='email' value={email} onChange={(e) => { console.log(e.target.value); handleEmailChange(e); }} />
         {email !== '' && !isValidEmail && <p style={{ color: 'red' }}>Please enter a valid email address.</p>}
       </Row>
       <Row
@@ -158,6 +223,27 @@ function AddDetailsForm({ isNewForm, userDetailsList }) {
           <p style={{ color: 'red' }}>Invalid Phone Number</p>
         )} */}
         {phoneNumber !== '' && !isValid && <p style={{ color: 'red' }}>Invalid Phone Number.</p>}
+      </Row>
+      <Row
+        style={{
+          ...formSyles.rowStyle,
+          display:'flex'
+        }}
+      >
+        <Col 
+        style={{
+          padding:10
+        }}
+        >
+          <Button onClick={()=>onGoBack()}>Back</Button>
+        </Col>
+        <Col
+          style={{
+          padding:10
+        }}
+        >
+          <Button onClick={()=>onSubmit()} >Submit</Button>
+        </Col>
       </Row>
     </div>
   )

@@ -40,6 +40,7 @@ function ShowDetails() {
 
 
   const onClickHandle=(isNew)=>{
+    console.log(isNew);
     if(isNew){
       history.push("/AddDetailsForm",{isNewForm:true,userDetailsList:null})
     }
