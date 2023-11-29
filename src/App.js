@@ -1,10 +1,13 @@
 // import logo from './logo.svg';
 import React from 'react';
 import './App.css';
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Router, Switch, Route, withRouter } from "react-router-dom";
 import Login from './components/login/Login';
 import ShowDetails from './components/showDetails/ShowDetails';
 import AddDetailsForm from './components/forms/AddDetailsForm';
+
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 
 class App extends React.Component {
 
@@ -13,12 +16,12 @@ class App extends React.Component {
   // }
 
   render(){
-    return (
+    return (<Router history={history}>
       <Switch>
-        {/* <Route exact path="/" ><Login /></Route> */}
-        <Route exact path="/"><ShowDetails /></Route>
-        <Route path="/AddDetailsForm" ><AddDetailsForm isNewForm={true} userDetailsList={null}/></Route>
-      </Switch>
+        <Route path="/ShowDetails"><ShowDetails /></Route>
+        <Route path="/AddDetailsForm"><AddDetailsForm isNewForm={true} userDetailsList={null}/></Route>
+        <Route exact path="/" ><Login /></Route>
+      </Switch></Router>
     );
   }
 }

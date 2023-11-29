@@ -38,6 +38,8 @@ function Login() {
         setUserLoginStatus(true);
         setErrorMsgShow(false);
         setErrorMsg(null);
+
+        // history.push("/ShowDetails");
       }
       else{
         setUserLoginStatus(false);
@@ -56,7 +58,7 @@ function Login() {
     if(userLoginStatus){
       history.push("/ShowDetails");
     }
-  },[userLoginStatus]);
+  },[userLoginStatus, history]);
 
   return (
     <div
