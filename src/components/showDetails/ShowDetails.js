@@ -66,7 +66,7 @@ function ShowDetails() {
             marginLeft:10
           }}
         >
-          <Button>Add New</Button>
+          <Button onClick={()=>onClickHandle(true)}>Add New</Button>
         </Col>
         <Col
            style={{
@@ -74,7 +74,7 @@ function ShowDetails() {
             marginLeft:10
           }}
         >
-          <Button>Edit</Button>
+          <Button onClick={()=>onClickHandle(false)}>Edit</Button>
         </Col>
       </Row>
     </div>
