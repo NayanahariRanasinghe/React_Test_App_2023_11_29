@@ -99,7 +99,7 @@ function Login() {
           </Row>
           {errorMsg!=null && errorMsgShow?
             <Row>
-              <h5>{errorMsg}</h5>
+              <h5 style={{ color: 'red' }}>{errorMsg}</h5>
             </Row>
             :<></>
           }

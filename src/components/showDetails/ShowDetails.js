@@ -1,21 +1,43 @@
-import React from 'react'
-import { withRouter,useHistory } from "react-router-dom";
+import React,{useEffect,useState} from 'react'
+import { withRouter,useHistory,useLocation } from "react-router-dom";
 import { Row, Col, Button } from 'react-bootstrap';
 
-const userDetails = [
-  { id: 1, title: 'FirstName', value: 'Amar' },
-  { id: 2, title: 'Last Name', value: 'Perera' },
-  { id: 3, title: 'Date of Birth', value: '1995-02-01' },
-  { id: 4, title: 'Age', value: '28' },
-  { id: 5, title: 'Language', value: 'Sinhala' },
-  { id: 6, title: 'Gender', value: 'Male' },
-  { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
-  { id: 8, title: 'Telephone', value: '0710000000' }
-];
+// const userDetails = [
+//   { id: 1, title: 'FirstName', value: 'Amar' },
+//   { id: 2, title: 'Last Name', value: 'Perera' },
+//   { id: 3, title: 'Date of Birth', value: '1995-02-01' },
+//   { id: 4, title: 'Age', value: '28' },
+//   { id: 5, title: 'Language', value: 'Sinhala' },
+//   { id: 6, title: 'Gender', value: 'Male' },
+//   { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
+//   { id: 8, title: 'Telephone', value: '0710000000' }
+// ];
 
 function ShowDetails() {
 
   const history= useHistory();
+  const location = useLocation();
+  const[userDetails,setUserDetails]=useState(
+    [
+      { id: 1, title: 'FirstName', value: 'Amar' },
+      { id: 2, title: 'Last Name', value: 'Perera' },
+      { id: 3, title: 'Date of Birth', value: '1995-02-01' },
+      { id: 4, title: 'Age', value: '28' },
+      { id: 5, title: 'Language', value: 'Sinhala' },
+      { id: 6, title: 'Gender', value: 'Male' },
+      { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
+      { id: 8, title: 'Telephone', value: '0710000000' }
+    ]
+  )
+
+
+  useEffect(()=>{
+    let userDetailsToPass = location.state?.userDetailsToPass;
+    console.log('userDetailsToPass:-', userDetailsToPass);
+    if(userDetailsToPass){
+      setUserDetails(userDetailsToPass);
+    }
+  },[location.state])
 
 
   const listItems = userDetails.map(userDetail =>
@@ -42,7 +64,7 @@ function ShowDetails() {
   const onClickHandle=(isNew)=>{
     console.log(isNew);
     if(isNew){
-      history.push("/AddDetailsForm",{isNewForm:true,userDetailsList:null})
+      history.push("/AddDetailsForm",{isNewForm:true,userDetailsList:userDetails})
     }
     else{
       history.push("/AddDetailsForm",{isNewForm:false,userDetailsList:userDetails})
