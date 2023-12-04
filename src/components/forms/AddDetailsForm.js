@@ -18,7 +18,7 @@ function AddDetailsForm() {
   const history = useHistory();
   const location = useLocation();
   const [passUserDetails, setPassUserDetails] = useState(null);
-  const [isNewForm,setIsNewForm]=useState(true);
+  const [isNewForm, setIsNewForm] = useState(true);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
@@ -137,22 +137,22 @@ function AddDetailsForm() {
     let isNewForm = location.state?.isNewForm;
     let userDetailsList = location.state?.userDetailsList;
     console.log('isNewForm:-', isNewForm);
-    console.log('userDetailsList:-', userDetailsList);
     setIsNewForm(isNewForm);
     setPassUserDetails(userDetailsList);
     if (!isNewForm && userDetailsList !== null) {
+      console.log('userDetailsList:-', userDetailsList.details);
       console.log('------------------------');
-      getSelectedLanguage(userDetailsList);
-      getSelectedGender(userDetailsList);
-      getFirstName(userDetailsList);
-      getLastName(userDetailsList);
-      getDOB(userDetailsList);
-      getAge(userDetailsList);
+      getSelectedLanguage(userDetailsList.details);
+      getSelectedGender(userDetailsList.details);
+      getFirstName(userDetailsList.details);
+      getLastName(userDetailsList.details);
+      getDOB(userDetailsList.details);
+      getAge(userDetailsList.details);
     }
   }, [location.state]);
 
   const onGoBack = () => {
-    history.push('/ShowDetails',{userDetailsToPass:passUserDetails});
+    history.push('/ShowDetails', { isNewForm: isNewForm, userDetailsToPass: null, selectedUserId: null });
   }
 
   const checkAllString = (value) => {
@@ -175,6 +175,7 @@ function AddDetailsForm() {
       checkAllString(email) &&
       checkAllString(phoneNumber)
     ) {
+      console.log('-------------------')
       let userDetailsToPass = [
         { id: 1, title: 'FirstName', value: firstName },
         { id: 2, title: 'Last Name', value: lastName },
@@ -185,7 +186,7 @@ function AddDetailsForm() {
         { id: 7, title: 'Email', value: email },
         { id: 8, title: 'Telephone', value: phoneNumber }
       ];
-      history.push('/ShowDetails',{userDetailsToPass:userDetailsToPass});
+      history.push('/ShowDetails', { isNewForm: isNewForm, userDetailsToPass: userDetailsToPass, selectedUserId:passUserDetails && passUserDetails!==null?passUserDetails.id:null });
       setIsfillAllFeildError(false);
     }
     else {
@@ -232,15 +233,15 @@ function AddDetailsForm() {
         style={formSyles.rowStyle}
       >
         <h5>Language</h5>
-        <label><input name='language' type='checkbox' value='English'  checked={selectedLanguage && selectedLanguage === 'English' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('English'); }} /> English</label>
-        <label><input name='language' type='checkbox' value='Sinhala' checked={selectedLanguage && selectedLanguage === 'Sinhala' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Sinhala');}} /> Sinhala</label>
-        <label><input name='language' type='checkbox' value='tamil' checked={selectedLanguage && selectedLanguage === 'Tamil' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Tamil');}} /> Tamil</label>
+        <label><input name='language' type='checkbox' value='English' checked={selectedLanguage && selectedLanguage === 'English' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('English'); }} /> English</label>
+        <label><input name='language' type='checkbox' value='Sinhala' checked={selectedLanguage && selectedLanguage === 'Sinhala' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Sinhala'); }} /> Sinhala</label>
+        <label><input name='language' type='checkbox' value='tamil' checked={selectedLanguage && selectedLanguage === 'Tamil' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Tamil'); }} /> Tamil</label>
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Gender</h5>
-        <label><input name='gender' type='radio' value='male' checked={selectedGender && selectedGender === 'Male' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedGender('Male');}} /> Male</label>
+        <label><input name='gender' type='radio' value='male' checked={selectedGender && selectedGender === 'Male' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedGender('Male'); }} /> Male</label>
         <label><input name='gender' type='radio' value='female' checked={selectedGender && selectedGender === 'Female' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedGender('Female'); }} /> Female</label>
       </Row>
       <Row
@@ -272,10 +273,10 @@ function AddDetailsForm() {
         {phoneNumber !== '' && !isValid && <p style={{ color: 'red' }}>Invalid Phone Number.</p>}
       </Row>
       {/* <Row> */}
-        {isfillAllFeildError ?
-          <h6 style={{ color: 'red' }}>Plase fill all the fields</h6>
-          : <></>
-        }
+      {isfillAllFeildError ?
+        <h6 style={{ color: 'red' }}>Plase fill all the fields</h6>
+        : <></>
+      }
       {/* </Row> */}
       <Row
         style={{

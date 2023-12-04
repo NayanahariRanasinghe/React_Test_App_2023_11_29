@@ -36,16 +36,35 @@ function ShowDetails(props) {
 
   useEffect(() => {
     console.log(' userDetails:-', userDetails);
-  }, [userDetails])
+  }, [userDetails]);
 
 
   useEffect(() => {
     let userDetailsToPass = location.state?.userDetailsToPass;
-    console.log('userDetailsToPass:-', userDetailsToPass);
+    let isNewForm = location.state?.isNewForm;
+    let selectedUserId = location.state?.selectedUserId;
+    console.log('userDetailsToPass:-', userDetailsToPass, isNewForm, selectedUserId);
     if (userDetailsToPass) {
-      // setUserDetails(userDetailsToPass);
+      if (isNewForm) {
+        let obj = {
+          id: userDetails.length,
+          details: userDetailsToPass
+        }
+        userDetails.push(obj);
+      }
+      else {
+        if (userDetails && userDetails.length > 0) {
+          for (let i = 0; i < userDetails.length; i++) {
+            if (selectedUserId === userDetails[i].id) {
+              userDetails.details = userDetailsToPass
+              console.log('------userDetails ',userDetails);
+            }
+          }
+        }
+      }
+      setUserDetails([...userDetails]);
     }
-  }, [location.state])
+  }, [location.state]);
 
 
   // const listItems = userDetails.map(userDetail =>
@@ -68,9 +87,22 @@ function ShowDetails(props) {
   //   </li>
   // );
 
+  const onClickHandle = (isNew, user) => {
+    console.log(isNew);
+    if (isNew) {
+      history.push("/AddDetailsForm", { isNewForm: true, userDetailsList: null })
+    }
+    else {
+      history.push("/AddDetailsForm", { isNewForm: false, userDetailsList: user })
+    }
+  }
 
   const usersList = userDetails.map(user =>
-    <li key={user.id}>
+    <li key={user.id} 
+      style={{
+        paddingBottom:30
+      }}
+    >
       <ul>
         {user.details.map(userDetail =>
           <li key={userDetail.id}
@@ -92,19 +124,16 @@ function ShowDetails(props) {
           </li>
         )}
       </ul>
+      <Col
+        style={{
+          marginRight: 10,
+          marginLeft: 10
+        }}
+      >
+        <Button onClick={() => onClickHandle(false, user)}>Edit</Button>
+      </Col>
     </li>
   );
-
-
-  const onClickHandle = (isNew) => {
-    console.log(isNew);
-    if (isNew) {
-      history.push("/AddDetailsForm", { isNewForm: true, userDetailsList: userDetails })
-    }
-    else {
-      history.push("/AddDetailsForm", { isNewForm: false, userDetailsList: userDetails })
-    }
-  }
 
   return (userDetails && userDetails.length > 0 ?
     <div>
@@ -125,15 +154,7 @@ function ShowDetails(props) {
             marginLeft: 10
           }}
         >
-          <Button onClick={() => onClickHandle(true)}>Add New</Button>
-        </Col>
-        <Col
-          style={{
-            marginRight: 10,
-            marginLeft: 10
-          }}
-        >
-          <Button onClick={() => onClickHandle(false)}>Edit</Button>
+          <Button onClick={() => onClickHandle(true, null)}>Add New</Button>
         </Col>
       </Row>
     </div>
