@@ -1,0 +1,1 @@
+export const USER_DETAILS_LIST = 'USER_DETAILS_LIST';

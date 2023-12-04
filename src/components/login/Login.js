@@ -1,9 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import { Row, Col,Button } from 'react-bootstrap';
 import {withRouter,useHistory } from "react-router-dom";
+import {useDispatch } from "react-redux";
+import { loginAction } from '../../redux/actions/login_action';
 
 function Login() {
   const history = useHistory();
+  const dispatch = useDispatch()
   const [username,setUserName]=useState(null);
   const [userPassword,setUserPassword]=useState(null);
   const [userLoginStatus,setUserLoginStatus]=useState(false);
@@ -36,6 +39,7 @@ function Login() {
     if(checkUserName(username)){
       if(checkPassword(userPassword)){
         setUserLoginStatus(true);
+        dispatch(loginAction(true));
         setErrorMsgShow(false);
         setErrorMsg(null);
 
@@ -43,12 +47,14 @@ function Login() {
       }
       else{
         setUserLoginStatus(false);
+        dispatch(loginAction(false));
         setErrorMsgShow(true);
         setErrorMsg('Incorrect Password')
       }
     }
     else{
       setUserLoginStatus(false);
+      dispatch(loginAction(false));
       setErrorMsgShow(true);
       setErrorMsg('Incorrect UserName')
     }
