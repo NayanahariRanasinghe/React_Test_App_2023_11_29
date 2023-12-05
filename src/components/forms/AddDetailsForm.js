@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
 import { connect } from "react-redux";
-import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
+import { userDetailsListAction, setIsNewUserFormAction, setSelectedUserAction } from '../../redux/actions/user_details_action';
 import { validatePhoneNumber } from '../../validations/phoneNoValidation';
 import { validateEmailAddress } from '../../validations/emailValidation';
 import CutomInputField from '../elements/CutomInputField';
@@ -19,16 +19,16 @@ const formSyles = {
   }
 };
 
-const languageCheckList=[
-  {id:1,value:'English'},
-  {id:2,value:'Sinhala'},
-  {id:3,value:'Tamil'}
-];
+// const languageCheckList=[
+//   {id:1,value:'English',selected:false},
+//   {id:2,value:'Sinhala',selected:false},
+//   {id:3,value:'Tamil',selected:false}
+// ];
 
-const genderList=[
-  {id:1,value:'Male'},
-  {id:2,value:'Female'},
-  {id:3,value:'Other'}
+const genderList = [
+  { id: 1, value: 'Male' },
+  { id: 2, value: 'Female' },
+  { id: 3, value: 'Other' }
 ]
 
 
@@ -39,7 +39,12 @@ function AddDetailsForm(props) {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [languageCheckList, setLanguageCheckList] = useState([
+    { id: 1, value: 'English', selected: false },
+    { id: 2, value: 'Sinhala', selected: false },
+    { id: 3, value: 'Tamil', selected: false }
+  ]);
+  const [selectedLanguage, setSelectedLanguage] = useState([]);
   const [selectedDOB, setSelectedDOB] = useState(null);
   const [age, setAge] = useState(null);
   const [email, setEmail] = useState('');
@@ -52,7 +57,7 @@ function AddDetailsForm(props) {
     const inputValue = e;
     const cleanedInput = inputValue.replace(/\D/g, '');
     setPhoneNumber(cleanedInput);
-    let valid=  validatePhoneNumber(cleanedInput);
+    let valid = validatePhoneNumber(cleanedInput);
     setIsValid(valid);
   };
 
@@ -82,10 +87,26 @@ function AddDetailsForm(props) {
       let lan = details.find(a => a.id === 5)
       if (lan) {
         setSelectedLanguage(lan.value);
+        console.log('add-- lan:-',lan.value);
+        setLanguageCheckList(lan.value);
       }
       else {
-        setSelectedLanguage(null);
+        setSelectedLanguage([]);
       }
+    }
+  }
+
+  const setLanguageList=(item)=>{
+    console.log('setLanguageList:-',item);
+    if(item && languageCheckList){
+      for (let i = 0; i < languageCheckList.length; i+=1) {
+        if(languageCheckList[i].id===item.id){
+          languageCheckList[i].selected=!languageCheckList[i].selected
+        }
+      }
+      console.log('----------languageCheckList:-',languageCheckList);
+      setLanguageCheckList([...languageCheckList]);
+      setSelectedLanguage([...languageCheckList]);
     }
   }
 
@@ -126,14 +147,14 @@ function AddDetailsForm(props) {
     }
   };
 
-  useEffect(()=>{
-    if(selectedDOB && selectedDOB!==null){
+  useEffect(() => {
+    if (selectedDOB && selectedDOB !== null) {
       calculateAge();
     }
-  },[selectedDOB]);
+  }, [selectedDOB]);
 
   const getDOB = (details) => {
-    console.log('----------------getDOB:-',details);
+    console.log('----------------getDOB:-', details);
     if (details && details !== null) {
       let dob = details.find(a => a.id === 3);
       if (dob) {
@@ -165,10 +186,10 @@ function AddDetailsForm(props) {
   }
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setPassUserDetails(props.userDetailsReducer.selectedUserDetails);
-    
-    if (props.userDetailsReducer.isNewUserForm===false && props.userDetailsReducer.selectedUserDetails !== null) {
+
+    if (props.userDetailsReducer.isNewUserForm === false && props.userDetailsReducer.selectedUserDetails !== null) {
       getSelectedLanguage(props.userDetailsReducer.selectedUserDetails.details);
       getSelectedGender(props.userDetailsReducer.selectedUserDetails.details);
       getFirstName(props.userDetailsReducer.selectedUserDetails.details);
@@ -177,7 +198,7 @@ function AddDetailsForm(props) {
       getUserAge(props.userDetailsReducer.selectedUserDetails.details);
     }
 
-  },[props.userDetailsReducer]);
+  }, [props.userDetailsReducer]);
 
   const onGoBack = () => {
     history.push('/ShowDetails');
@@ -191,7 +212,7 @@ function AddDetailsForm(props) {
     return bool;
   }
 
-  const setDetailsToRedux=()=>{
+  const setDetailsToRedux = () => {
     let userDetailsToPass = [
       { id: 1, title: 'FirstName', value: firstName },
       { id: 2, title: 'Last Name', value: lastName },
@@ -203,8 +224,8 @@ function AddDetailsForm(props) {
       { id: 8, title: 'Telephone', value: phoneNumber }
     ];
 
-    let newList=props.userDetailsReducer.userDetailsList;
-    
+    let newList = props.userDetailsReducer.userDetailsList;
+
     if (userDetailsToPass) {
       if (props.userDetailsReducer.isNewUserForm) {
         let obj = {
@@ -218,13 +239,25 @@ function AddDetailsForm(props) {
           for (let i = 0; i < newList.length; i++) {
             if (props.userDetailsReducer.selectedUserDetails.id === newList[i].id) {
               newList[i].details = userDetailsToPass
-              console.log('------newList ',newList);
+              console.log('------newList ', newList);
             }
           }
         }
       }
       props.userDetailsListRedux(newList);
     }
+  }
+
+  const findLanguageCheckValidation=()=>{
+    let bool=false;
+    let lan = selectedLanguage.find(a=>a.selected);
+    if(lan){
+      bool=true
+    }
+    else{
+      bool=false
+    }
+    return bool;
   }
 
   const onSubmit = () => {
@@ -234,7 +267,7 @@ function AddDetailsForm(props) {
       checkAllString(lastName) &&
       checkAllString(moment(selectedDOB).format('yyyy-mm-dd')) &&
       checkAllString(age) &&
-      checkAllString(selectedLanguage) &&
+      findLanguageCheckValidation(selectedLanguage) &&
       checkAllString(selectedGender) &&
       checkAllString(email) &&
       checkAllString(phoneNumber)
@@ -249,7 +282,7 @@ function AddDetailsForm(props) {
     }
   }
 
-  const phoneNoOnBlur=()=>{
+  const phoneNoOnBlur = () => {
     let valid = validatePhoneNumber(phoneNumber);
     setIsValid(valid);
   }
@@ -260,13 +293,13 @@ function AddDetailsForm(props) {
         style={formSyles.rowStyle}
       >
         <h5>First Name</h5>
-        <CutomInputField name={'firstName'} setValue={setFirstName} value={firstName} inputMode={'default'} onBlur={null}/>
+        <CutomInputField name={'firstName'} setValue={setFirstName} value={firstName} inputMode={'default'} onBlur={null} />
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Last Name</h5>
-        <CutomInputField name={'lastName'} setValue={setLastName} value={lastName} inputMode={'default'} onBlur={null}/>
+        <CutomInputField name={'lastName'} setValue={setLastName} value={lastName} inputMode={'default'} onBlur={null} />
       </Row>
       <Row
         style={formSyles.rowStyle}
@@ -282,13 +315,13 @@ function AddDetailsForm(props) {
         style={formSyles.rowStyle}
       >
         <h5>Age</h5>
-        <CutomInputField name={'age'} setValue={setAge} value={age} inputMode={'numeric'} onBlur={null}/>
+        <CutomInputField name={'age'} setValue={setAge} value={age} inputMode={'numeric'} onBlur={null} />
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Language</h5>
-        <CustomCheckboxField checkValueList={languageCheckList} name={'language'} selectedValue={selectedLanguage} setValue={setSelectedLanguage}/>
+        <CustomCheckboxField checkValueList={languageCheckList} name={'language'} selectedValue={selectedLanguage} setValue={setLanguageList} />
       </Row>
       <Row
         style={formSyles.rowStyle}
@@ -307,8 +340,8 @@ function AddDetailsForm(props) {
         style={formSyles.rowStyle}
       >
         <h5>Telephone</h5>
-        <CutomInputField inputMode={'default'} name={'telephone'} setValue={handleInputPhoneNumberChange} value={phoneNumber} onBlur={phoneNoOnBlur}/>
-   
+        <CutomInputField inputMode={'default'} name={'telephone'} setValue={handleInputPhoneNumberChange} value={phoneNumber} onBlur={phoneNoOnBlur} />
+
         {phoneNumber !== '' && !isValid && <p style={{ color: 'red' }}>Invalid Phone Number.</p>}
       </Row>
       {isfillAllFeildError ?

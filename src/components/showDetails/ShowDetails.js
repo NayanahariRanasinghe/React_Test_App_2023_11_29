@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { withRouter, useHistory } from "react-router-dom";
 import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from "react-redux";
-import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
+import { userDetailsListAction, setIsNewUserFormAction, setSelectedUserAction } from '../../redux/actions/user_details_action';
 
 function ShowDetails(props) {
 
@@ -31,9 +31,9 @@ function ShowDetails(props) {
   }
 
   const usersList = userDetails.map(user =>
-    <li key={user.id} 
+    <li key={user.id}
       style={{
-        paddingBottom:30
+        paddingBottom: 30
       }}
     >
       <ul>
@@ -52,7 +52,21 @@ function ShowDetails(props) {
             >
               <Col style={{ flex: 0.2 }}>{userDetail.title}</Col>
               <Col style={{ flex: 0.05 }}>{':'}</Col>
-              <Col style={{ flex: 0.3 }}>{userDetail.value}</Col>
+              <Col style={{ flex: 0.3 }}>
+                {userDetail.id === 5 ?
+                  <>
+                    {userDetail.value.map((lan) =>
+                      <li key={lan.id}
+                        style={{
+                          listStyleType: 'none',
+                        }}
+                      >{lan.selected ? lan.value : ''}</li>
+                    )}
+                  </>
+                  :
+                  <>{userDetail.value}</>
+                }
+              </Col>
             </Row>
           </li>
         )}

@@ -1,44 +1,44 @@
-import React,{useState,useEffect} from 'react'
-import { Row, Col,Button } from 'react-bootstrap';
-import {withRouter,useHistory } from "react-router-dom";
-import {useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react'
+import { Row, Col, Button } from 'react-bootstrap';
+import { withRouter, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { loginAction } from '../../redux/actions/login_action';
 import { userDetailsListAction } from '../../redux/actions/user_details_action';
 
 function Login() {
   const history = useHistory();
   const dispatch = useDispatch()
-  const [username,setUserName]=useState(null);
-  const [userPassword,setUserPassword]=useState(null);
-  const [userLoginStatus,setUserLoginStatus]=useState(false);
-  const [errorMsg,setErrorMsg]=useState(null);
-  const [errorMsgShow,setErrorMsgShow]=useState(false);
+  const [username, setUserName] = useState(null);
+  const [userPassword, setUserPassword] = useState(null);
+  const [userLoginStatus, setUserLoginStatus] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [errorMsgShow, setErrorMsgShow] = useState(false);
 
-  const checkUserName=(value)=>{
-    let bool=false;
-    if(value==='admin'){
-      bool=true
+  const checkUserName = (value) => {
+    let bool = false;
+    if (value === 'admin') {
+      bool = true
     }
-    else{
-      bool=false
+    else {
+      bool = false
     }
     return bool;
   }
 
-  const checkPassword=(value)=>{
-    let bool=false;
-    if(value==='1234'){
-      bool=true
+  const checkPassword = (value) => {
+    let bool = false;
+    if (value === '1234') {
+      bool = true
     }
-    else{
-      bool=false
+    else {
+      bool = false
     }
     return bool;
   }
 
-  const onLogin=()=>{
-    if(checkUserName(username)){
-      if(checkPassword(userPassword)){
+  const onLogin = () => {
+    if (checkUserName(username)) {
+      if (checkPassword(userPassword)) {
         setUserLoginStatus(true);
         dispatch(loginAction(true));
         setErrorMsgShow(false);
@@ -52,7 +52,13 @@ function Login() {
                 { id: 2, title: 'Last Name', value: 'Perera' },
                 { id: 3, title: 'Date of Birth', value: '1995-02-01' },
                 { id: 4, title: 'Age', value: '28' },
-                { id: 5, title: 'Language', value: 'Sinhala' },
+                {
+                  id: 5, title: 'Language', value: [
+                    { id: 1, value: 'English', selected: true },
+                    { id: 2, value: 'Sinhala', selected: true },
+                    { id: 3, value: 'Tamil', selected: false }
+                  ]
+                },
                 { id: 6, title: 'Gender', value: 'Male' },
                 { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
                 { id: 8, title: 'Telephone', value: '0710000000' }
@@ -62,14 +68,14 @@ function Login() {
         ));
         // history.push("/ShowDetails");
       }
-      else{
+      else {
         setUserLoginStatus(false);
         dispatch(loginAction(false));
         setErrorMsgShow(true);
         setErrorMsg('Incorrect Password')
       }
     }
-    else{
+    else {
       setUserLoginStatus(false);
       dispatch(loginAction(false));
       setErrorMsgShow(true);
@@ -77,11 +83,11 @@ function Login() {
     }
   }
 
-  useEffect(()=>{
-    if(userLoginStatus){
+  useEffect(() => {
+    if (userLoginStatus) {
       history.push("/ShowDetails");
     }
-  },[userLoginStatus, history]);
+  }, [userLoginStatus, history]);
 
   return (
     <div
@@ -118,15 +124,15 @@ function Login() {
             <input name='password' type='password' onChange={(e) => { console.log(e.target.value); setUserPassword(e.target.value) }} />
           </Row>
           <Row>
-            <Button onClick={()=>onLogin()}>Login</Button>
+            <Button onClick={() => onLogin()}>Login</Button>
           </Row>
-          {errorMsg!=null && errorMsgShow?
+          {errorMsg != null && errorMsgShow ?
             <Row>
               <h5 style={{ color: 'red' }}>{errorMsg}</h5>
             </Row>
-            :<></>
+            : <></>
           }
-          </Col>
+        </Col>
       </Row>
     </div>
   )

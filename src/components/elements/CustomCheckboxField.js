@@ -11,8 +11,8 @@ export default function CustomCheckboxField({name, checkValueList,setValue,selec
                 name={name}
                 type='checkbox'
                 value={item.value}
-                checked={selectedValue && selectedValue === item.value ? true : false}
-                onChange={(e) => { console.log(e.target.value); setValue(item.value);}}
+                checked={item.selected? true : false}
+                onChange={(e) => { console.log(item); setValue(item);}}
               />
               {item.value}
             </label>
