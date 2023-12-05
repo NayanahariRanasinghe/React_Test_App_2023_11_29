@@ -4,6 +4,8 @@ import { Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
+import { connect } from "react-redux";
+import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
 
 const formSyles = {
   rowStyle: {
@@ -13,12 +15,11 @@ const formSyles = {
 }
 
 
-function AddDetailsForm() {
+function AddDetailsForm(props) {
 
   const history = useHistory();
   const location = useLocation();
   const [passUserDetails, setPassUserDetails] = useState(null);
-  const [isNewForm, setIsNewForm] = useState(true);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
@@ -104,6 +105,7 @@ function AddDetailsForm() {
   }
 
   const getDOB = (details) => {
+    console.log('----------------getDOB:-',details);
     if (details && details !== null) {
       let dob = details.find(a => a.id === 3);
       if (dob) {
@@ -133,26 +135,27 @@ function AddDetailsForm() {
   }
 
 
-  useEffect(() => {
-    let isNewForm = location.state?.isNewForm;
-    let userDetailsList = location.state?.userDetailsList;
-    console.log('isNewForm:-', isNewForm);
-    setIsNewForm(isNewForm);
-    setPassUserDetails(userDetailsList);
-    if (!isNewForm && userDetailsList !== null) {
-      console.log('userDetailsList:-', userDetailsList.details);
+  useEffect(()=>{
+    console.log('props.userDetailsReducer.userDetailsList:-',props.userDetailsReducer.userDetailsList);
+    console.log('props.userDetailsReducer.selectedUserDetails:-',props.userDetailsReducer.selectedUserDetails);
+    console.log('props.userDetailsReducer.isNewUserForm:-',props.userDetailsReducer.isNewUserForm);
+    setPassUserDetails(props.userDetailsReducer.selectedUserDetails);
+    
+    if (props.userDetailsReducer.isNewUserForm===false && props.userDetailsReducer.selectedUserDetails !== null) {
+      console.log('userDetailsList:-', props.userDetailsReducer.selectedUserDetails.details);
       console.log('------------------------');
-      getSelectedLanguage(userDetailsList.details);
-      getSelectedGender(userDetailsList.details);
-      getFirstName(userDetailsList.details);
-      getLastName(userDetailsList.details);
-      getDOB(userDetailsList.details);
-      getAge(userDetailsList.details);
+      getSelectedLanguage(props.userDetailsReducer.selectedUserDetails.details);
+      getSelectedGender(props.userDetailsReducer.selectedUserDetails.details);
+      getFirstName(props.userDetailsReducer.selectedUserDetails.details);
+      getLastName(props.userDetailsReducer.selectedUserDetails.details);
+      getDOB(props.userDetailsReducer.selectedUserDetails.details);
+      getAge(props.userDetailsReducer.selectedUserDetails.details);
     }
-  }, [location.state]);
+
+  },[props.userDetailsReducer]);
 
   const onGoBack = () => {
-    history.push('/ShowDetails', { isNewForm: isNewForm, userDetailsToPass: null, selectedUserId: null });
+    history.push('/ShowDetails');
   }
 
   const checkAllString = (value) => {
@@ -161,6 +164,42 @@ function AddDetailsForm() {
       bool = true
     }
     return bool;
+  }
+
+  const setDetailsToRedux=()=>{
+    let userDetailsToPass = [
+      { id: 1, title: 'FirstName', value: firstName },
+      { id: 2, title: 'Last Name', value: lastName },
+      { id: 3, title: 'Date of Birth', value: moment(selectedDOB).format('YYYY-MM-DD') },
+      { id: 4, title: 'Age', value: age },
+      { id: 5, title: 'Language', value: selectedLanguage },
+      { id: 6, title: 'Gender', value: selectedGender },
+      { id: 7, title: 'Email', value: email },
+      { id: 8, title: 'Telephone', value: phoneNumber }
+    ];
+
+    let newList=props.userDetailsReducer.userDetailsList;
+    
+    if (userDetailsToPass) {
+      if (props.userDetailsReducer.isNewUserForm) {
+        let obj = {
+          id: newList.length,
+          details: userDetailsToPass
+        }
+        newList.push(obj);
+      }
+      else {
+        if (newList && newList.length > 0) {
+          for (let i = 0; i < newList.length; i++) {
+            if (props.userDetailsReducer.selectedUserDetails.id === newList[i].id) {
+              newList[i].details = userDetailsToPass
+              console.log('------newList ',newList);
+            }
+          }
+        }
+      }
+      props.userDetailsListRedux(newList);
+    }
   }
 
   const onSubmit = () => {
@@ -176,17 +215,8 @@ function AddDetailsForm() {
       checkAllString(phoneNumber)
     ) {
       console.log('-------------------')
-      let userDetailsToPass = [
-        { id: 1, title: 'FirstName', value: firstName },
-        { id: 2, title: 'Last Name', value: lastName },
-        { id: 3, title: 'Date of Birth', value: moment(selectedDOB).format('YYYY-MM-DD') },
-        { id: 4, title: 'Age', value: age },
-        { id: 5, title: 'Language', value: selectedLanguage },
-        { id: 6, title: 'Gender', value: selectedGender },
-        { id: 7, title: 'Email', value: email },
-        { id: 8, title: 'Telephone', value: phoneNumber }
-      ];
-      history.push('/ShowDetails', { isNewForm: isNewForm, userDetailsToPass: userDetailsToPass, selectedUserId:passUserDetails && passUserDetails!==null?passUserDetails.id:null });
+      setDetailsToRedux();
+      history.push('/ShowDetails');
       setIsfillAllFeildError(false);
     }
     else {
@@ -303,4 +333,16 @@ function AddDetailsForm() {
   )
 }
 
-export default withRouter(AddDetailsForm);
+// export default withRouter(AddDetailsForm);
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  userDetailsListRedux: (payload) => dispatch(userDetailsListAction(payload)),
+  setSelectedUserActionRedux: (payload) => dispatch(setSelectedUserAction(payload)),
+  setIsNewUserFormActionRedux: (payload) => dispatch(setIsNewUserFormAction(payload))
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddDetailsForm));
