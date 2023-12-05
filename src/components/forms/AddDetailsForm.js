@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
 import { validatePhoneNumber } from '../../validations/phoneNoValidation';
 import { validateEmailAddress } from '../../validations/emailValidation';
+import CutomInputField from '../elements/CutomInputField';
 
 const formSyles = {
   rowStyle: {
@@ -224,13 +225,15 @@ function AddDetailsForm(props) {
         style={formSyles.rowStyle}
       >
         <h5>First Name</h5>
-        <input name='firstName' value={firstName && firstName !== null ? firstName : ''} onChange={(e) => { console.log(e.target.value); setFirstName(e.target.value); }} />
+        <CutomInputField name={'firstName'} setValue={setFirstName} value={firstName} inputMode={'default'}/>
+        {/* <input name='firstName' value={firstName && firstName !== null ? firstName : ''} onChange={(e) => { console.log(e.target.value); setFirstName(e.target.value); }} /> */}
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Last Name</h5>
-        <input name='lastName' value={lastName && lastName !== null ? lastName : ''} onChange={(e) => { console.log(e.target.value); setLastName(e.target.value); }} />
+        <CutomInputField name={'lastName'} setValue={setLastName} value={lastName} inputMode={'default'}/>
+        {/* <input name='lastName' value={lastName && lastName !== null ? lastName : ''} onChange={(e) => { console.log(e.target.value); setLastName(e.target.value); }} /> */}
       </Row>
       <Row
         style={formSyles.rowStyle}
@@ -251,7 +254,8 @@ function AddDetailsForm(props) {
         style={formSyles.rowStyle}
       >
         <h5>Age</h5>
-        <input name='age' value={age} inputMode='numeric' onChange={(e) => { console.log(e.target.value); setAge(e.target.value) }} />
+        <CutomInputField name={'age'} setValue={setAge} value={age} inputMode={'numeric'}/>
+        {/* <input name='age' value={age} inputMode='numeric' onChange={(e) => { console.log(e.target.value); setAge(e.target.value) }} /> */}
       </Row>
       <Row
         style={formSyles.rowStyle}
