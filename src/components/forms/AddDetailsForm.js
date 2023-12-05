@@ -9,13 +9,27 @@ import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } fr
 import { validatePhoneNumber } from '../../validations/phoneNoValidation';
 import { validateEmailAddress } from '../../validations/emailValidation';
 import CutomInputField from '../elements/CutomInputField';
+import CustomCheckboxField from '../elements/CustomCheckboxField';
+import CustomRadioField from '../elements/CustomRadioField';
 
 const formSyles = {
   rowStyle: {
     paddingBottom: 30,
     width: '40%',
   }
-}
+};
+
+const languageCheckList=[
+  {id:1,value:'English'},
+  {id:2,value:'Sinhala'},
+  {id:3,value:'Tamil'}
+];
+
+const genderList=[
+  {id:1,value:'Male'},
+  {id:2,value:'Female'},
+  {id:3,value:'Other'}
+]
 
 
 function AddDetailsForm(props) {
@@ -35,8 +49,7 @@ function AddDetailsForm(props) {
   const [isfillAllFeildError, setIsfillAllFeildError] = useState(false);
 
   const handleInputPhoneNumberChange = (e) => {
-    const inputValue = e.target.value;
-    // Replace any non-digit characters
+    const inputValue = e;
     const cleanedInput = inputValue.replace(/\D/g, '');
     setPhoneNumber(cleanedInput);
     let valid=  validatePhoneNumber(cleanedInput);
@@ -44,7 +57,7 @@ function AddDetailsForm(props) {
   };
 
   const handleEmailChange = (e) => {
-    const newEmail = e.target.value;
+    const newEmail = e;
     setEmail(newEmail);
 
     const isValid = validateEmailAddress(newEmail);
@@ -101,10 +114,8 @@ function AddDetailsForm(props) {
     const dobDate = new Date(selectedDOB);
     const today = new Date();
 
-    // Calculate the difference in years
     const ageDifference = today.getFullYear() - dobDate.getFullYear();
 
-    // Check if the birthday has occurred this year
     if (
       today.getMonth() < dobDate.getMonth() ||
       (today.getMonth() === dobDate.getMonth() && today.getDate() < dobDate.getDate())
@@ -155,14 +166,9 @@ function AddDetailsForm(props) {
 
 
   useEffect(()=>{
-    // console.log('props.userDetailsReducer.userDetailsList:-',props.userDetailsReducer.userDetailsList);
-    // console.log('props.userDetailsReducer.selectedUserDetails:-',props.userDetailsReducer.selectedUserDetails);
-    // console.log('props.userDetailsReducer.isNewUserForm:-',props.userDetailsReducer.isNewUserForm);
     setPassUserDetails(props.userDetailsReducer.selectedUserDetails);
     
     if (props.userDetailsReducer.isNewUserForm===false && props.userDetailsReducer.selectedUserDetails !== null) {
-      // console.log('userDetailsList:-', props.userDetailsReducer.selectedUserDetails.details);
-      // console.log('------------------------');
       getSelectedLanguage(props.userDetailsReducer.selectedUserDetails.details);
       getSelectedGender(props.userDetailsReducer.selectedUserDetails.details);
       getFirstName(props.userDetailsReducer.selectedUserDetails.details);
@@ -243,96 +249,72 @@ function AddDetailsForm(props) {
     }
   }
 
+  const phoneNoOnBlur=()=>{
+    let valid = validatePhoneNumber(phoneNumber);
+    setIsValid(valid);
+  }
+
   return (
     <div>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>First Name</h5>
-        <CutomInputField name={'firstName'} setValue={setFirstName} value={firstName} inputMode={'default'}/>
-        {/* <input name='firstName' value={firstName && firstName !== null ? firstName : ''} onChange={(e) => { console.log(e.target.value); setFirstName(e.target.value); }} /> */}
+        <CutomInputField name={'firstName'} setValue={setFirstName} value={firstName} inputMode={'default'} onBlur={null}/>
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Last Name</h5>
-        <CutomInputField name={'lastName'} setValue={setLastName} value={lastName} inputMode={'default'}/>
-        {/* <input name='lastName' value={lastName && lastName !== null ? lastName : ''} onChange={(e) => { console.log(e.target.value); setLastName(e.target.value); }} /> */}
+        <CutomInputField name={'lastName'} setValue={setLastName} value={lastName} inputMode={'default'} onBlur={null}/>
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Date of Birth</h5>
-        {/* <input name='dob' onChange={(e) => { console.log(e.target.value);  }} /> */}
         <DatePicker
-          // className={"form-control form-control-sm form__field" + cuslist + " "+this.state.warningclses} 
           selected={selectedDOB ? selectedDOB : ''}
           dateFormat="yyyy-MM-dd"
-          // onBlur={e => this.handleValidate(e.target.value)} 
           onChange={date => { console.log(date); setSelectedDOB(date) }}
-        // disabled={this.props.disabled}
-
         />
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Age</h5>
-        <CutomInputField name={'age'} setValue={setAge} value={age} inputMode={'numeric'}/>
-        {/* <input name='age' value={age} inputMode='numeric' onChange={(e) => { console.log(e.target.value); setAge(e.target.value) }} /> */}
+        <CutomInputField name={'age'} setValue={setAge} value={age} inputMode={'numeric'} onBlur={null}/>
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Language</h5>
-        <label><input name='language' type='checkbox' value='English' checked={selectedLanguage && selectedLanguage === 'English' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('English'); }} /> English</label>
-        <label><input name='language' type='checkbox' value='Sinhala' checked={selectedLanguage && selectedLanguage === 'Sinhala' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Sinhala'); }} /> Sinhala</label>
-        <label><input name='language' type='checkbox' value='tamil' checked={selectedLanguage && selectedLanguage === 'Tamil' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedLanguage('Tamil'); }} /> Tamil</label>
+        <CustomCheckboxField checkValueList={languageCheckList} name={'language'} selectedValue={selectedLanguage} setValue={setSelectedLanguage}/>
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Gender</h5>
-        <label><input name='gender' type='radio' value='male' checked={selectedGender && selectedGender === 'Male' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedGender('Male'); }} /> Male</label>
-        <label><input name='gender' type='radio' value='female' checked={selectedGender && selectedGender === 'Female' ? true : false} onChange={(e) => { console.log(e.target.value); setSelectedGender('Female'); }} /> Female</label>
+        <CustomRadioField checkValueList={genderList} name={'gender'} selectedValue={selectedGender} setValue={setSelectedGender} />
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Email</h5>
-        <input name='email' value={email} onChange={(e) => { console.log(e.target.value); handleEmailChange(e); }} />
+        <CutomInputField inputMode={'default'} name={'email'} setValue={handleEmailChange} value={email} />
         {email !== '' && !isValidEmail && <p style={{ color: 'red' }}>Please enter a valid email address.</p>}
       </Row>
       <Row
         style={formSyles.rowStyle}
       >
         <h5>Telephone</h5>
-        {/* <input name='telephone' onChange={(e) => { console.log(e.target.value);  }} /> */}
-        {/* <label>
-          Enter Sri Lankan Phone Number: */}
-        <input
-          type="text"
-          value={phoneNumber}
-          onChange={handleInputPhoneNumberChange}
-          onBlur={()=>{
-            let valid = validatePhoneNumber(phoneNumber);
-            setIsValid(valid);
-          }}
-        />
-        {/* </label> */}
-        {/* { isValid ? (
-          <p style={{ color: 'green' }}>Valid Phone Number</p>
-        ) : (
-          <p style={{ color: 'red' }}>Invalid Phone Number</p>
-        )} */}
+        <CutomInputField inputMode={'default'} name={'telephone'} setValue={handleInputPhoneNumberChange} value={phoneNumber} onBlur={phoneNoOnBlur}/>
+   
         {phoneNumber !== '' && !isValid && <p style={{ color: 'red' }}>Invalid Phone Number.</p>}
       </Row>
-      {/* <Row> */}
       {isfillAllFeildError ?
         <h6 style={{ color: 'red' }}>Plase fill all the fields</h6>
         : <></>
       }
-      {/* </Row> */}
       <Row
         style={{
           // ...formSyles.rowStyle,
@@ -357,8 +339,6 @@ function AddDetailsForm(props) {
     </div>
   )
 }
-
-// export default withRouter(AddDetailsForm);
 
 const mapStateToProps = state => ({
   ...state
