@@ -97,6 +97,30 @@ function AddDetailsForm(props) {
     }
   }
 
+  const calculateAge = () => {
+    const dobDate = new Date(selectedDOB);
+    const today = new Date();
+
+    // Calculate the difference in years
+    const ageDifference = today.getFullYear() - dobDate.getFullYear();
+
+    // Check if the birthday has occurred this year
+    if (
+      today.getMonth() < dobDate.getMonth() ||
+      (today.getMonth() === dobDate.getMonth() && today.getDate() < dobDate.getDate())
+    ) {
+      setAge(ageDifference - 1); // Subtract 1 if the birthday hasn't occurred yet
+    } else {
+      setAge(ageDifference);
+    }
+  };
+
+  useEffect(()=>{
+    if(selectedDOB && selectedDOB!==null){
+      calculateAge();
+    }
+  },[selectedDOB]);
+
   const getDOB = (details) => {
     console.log('----------------getDOB:-',details);
     if (details && details !== null) {
