@@ -115,7 +115,7 @@ function Login() {
             }}
           >
             <h3>Password</h3>
-            <input name='password' onChange={(e) => { console.log(e.target.value); setUserPassword(e.target.value) }} />
+            <input name='password' type='password' onChange={(e) => { console.log(e.target.value); setUserPassword(e.target.value) }} />
           </Row>
           <Row>
             <Button onClick={()=>onLogin()}>Login</Button>

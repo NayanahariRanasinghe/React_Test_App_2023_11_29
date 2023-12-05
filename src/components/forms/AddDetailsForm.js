@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { withRouter, useHistory, useLocation } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import { Button, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
 import { connect } from "react-redux";
 import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
+import { validatePhoneNumber } from '../../validations/phoneNoValidation';
+import { validateEmailAddress } from '../../validations/emailValidation';
 
 const formSyles = {
   rowStyle: {
@@ -18,7 +20,6 @@ const formSyles = {
 function AddDetailsForm(props) {
 
   const history = useHistory();
-  const location = useLocation();
   const [passUserDetails, setPassUserDetails] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
@@ -32,29 +33,20 @@ function AddDetailsForm(props) {
   const [isValid, setIsValid] = useState(false);
   const [isfillAllFeildError, setIsfillAllFeildError] = useState(false);
 
-
-  const validatePhoneNumber = () => {
-    // Regular expression for Sri Lankan phone numbers
-    const phoneRegex = /^(?:\+94|0)([1-9][0-9]{8})$/;
-    setIsValid(!phoneRegex.test(phoneNumber));
-    console.log('validatePhoneNumber', phoneRegex.test(phoneNumber));
-  };
-
   const handleInputPhoneNumberChange = (e) => {
     const inputValue = e.target.value;
     // Replace any non-digit characters
     const cleanedInput = inputValue.replace(/\D/g, '');
     setPhoneNumber(cleanedInput);
-    validatePhoneNumber();
+    let valid=  validatePhoneNumber(cleanedInput);
+    setIsValid(valid);
   };
 
   const handleEmailChange = (e) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
 
-    // Regular expression for basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(newEmail);
+    const isValid = validateEmailAddress(newEmail);
 
     setIsValidEmail(isValid);
   };
@@ -114,7 +106,7 @@ function AddDetailsForm(props) {
     }
   }
 
-  const getAge = (details) => {
+  const getUserAge = (details) => {
     if (details && details !== null) {
       let age = details.find(a => a.id === 4);
       if (age) {
@@ -129,27 +121,29 @@ function AddDetailsForm(props) {
       let tele = details.find(a => a.id === 8);
       if (tele) {
         setPhoneNumber(tele.value);
-        validatePhoneNumber();
+        let valid = validatePhoneNumber(tele.value)
+        setIsValid(valid)
       }
+
     }
   }
 
 
   useEffect(()=>{
-    console.log('props.userDetailsReducer.userDetailsList:-',props.userDetailsReducer.userDetailsList);
-    console.log('props.userDetailsReducer.selectedUserDetails:-',props.userDetailsReducer.selectedUserDetails);
-    console.log('props.userDetailsReducer.isNewUserForm:-',props.userDetailsReducer.isNewUserForm);
+    // console.log('props.userDetailsReducer.userDetailsList:-',props.userDetailsReducer.userDetailsList);
+    // console.log('props.userDetailsReducer.selectedUserDetails:-',props.userDetailsReducer.selectedUserDetails);
+    // console.log('props.userDetailsReducer.isNewUserForm:-',props.userDetailsReducer.isNewUserForm);
     setPassUserDetails(props.userDetailsReducer.selectedUserDetails);
     
     if (props.userDetailsReducer.isNewUserForm===false && props.userDetailsReducer.selectedUserDetails !== null) {
-      console.log('userDetailsList:-', props.userDetailsReducer.selectedUserDetails.details);
-      console.log('------------------------');
+      // console.log('userDetailsList:-', props.userDetailsReducer.selectedUserDetails.details);
+      // console.log('------------------------');
       getSelectedLanguage(props.userDetailsReducer.selectedUserDetails.details);
       getSelectedGender(props.userDetailsReducer.selectedUserDetails.details);
       getFirstName(props.userDetailsReducer.selectedUserDetails.details);
       getLastName(props.userDetailsReducer.selectedUserDetails.details);
       getDOB(props.userDetailsReducer.selectedUserDetails.details);
-      getAge(props.userDetailsReducer.selectedUserDetails.details);
+      getUserAge(props.userDetailsReducer.selectedUserDetails.details);
     }
 
   },[props.userDetailsReducer]);
@@ -245,7 +239,7 @@ function AddDetailsForm(props) {
         {/* <input name='dob' onChange={(e) => { console.log(e.target.value);  }} /> */}
         <DatePicker
           // className={"form-control form-control-sm form__field" + cuslist + " "+this.state.warningclses} 
-          selected={selectedDOB ? selectedDOB : new Date()}
+          selected={selectedDOB ? selectedDOB : ''}
           dateFormat="yyyy-MM-dd"
           // onBlur={e => this.handleValidate(e.target.value)} 
           onChange={date => { console.log(date); setSelectedDOB(date) }}
@@ -292,7 +286,10 @@ function AddDetailsForm(props) {
           type="text"
           value={phoneNumber}
           onChange={handleInputPhoneNumberChange}
-          onBlur={validatePhoneNumber}
+          onBlur={()=>{
+            let valid = validatePhoneNumber(phoneNumber);
+            setIsValid(valid);
+          }}
         />
         {/* </label> */}
         {/* { isValid ? (

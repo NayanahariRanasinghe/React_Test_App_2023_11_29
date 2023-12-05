@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { withRouter, useHistory, useLocation } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } from '../../redux/actions/user_details_action';
@@ -7,13 +7,10 @@ import { userDetailsListAction,setIsNewUserFormAction,setSelectedUserAction } fr
 function ShowDetails(props) {
 
   const history = useHistory();
-  const location = useLocation();
   const [userDetails, setUserDetails] = useState([]);
 
   useEffect(() => {
-    // console.log('props.userDetailsReducer:-', props.userDetailsReducer.userDetailsList);
     if (props.userDetailsReducer.userDetailsList && props.userDetailsReducer.userDetailsList.length > 0) {
-      // console.log('--ShowDetails--------------------------');
       setUserDetails(props.userDetailsReducer.userDetailsList);
     }
   }, [props.userDetailsReducer]);
@@ -53,7 +50,7 @@ function ShowDetails(props) {
                 paddingBottom: 10
               }}
             >
-              <Col style={{ flex: 0.1 }}>{userDetail.title}</Col>
+              <Col style={{ flex: 0.2 }}>{userDetail.title}</Col>
               <Col style={{ flex: 0.05 }}>{':'}</Col>
               <Col style={{ flex: 0.3 }}>{userDetail.value}</Col>
             </Row>
