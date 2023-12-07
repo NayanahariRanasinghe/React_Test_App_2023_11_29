@@ -3,6 +3,9 @@ import { withRouter, useHistory } from "react-router-dom";
 import { Row, Col, Button } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { userDetailsListAction, setIsNewUserFormAction, setSelectedUserAction } from '../../redux/actions/user_details_action';
+import { loginAction } from '../../redux/actions/login_action';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function ShowDetails(props) {
 
@@ -82,9 +85,45 @@ function ShowDetails(props) {
     </li>
   );
 
+  const onLogOut = () => {
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            // alert('Click Yes')
+            props.loginActionRedux(false);
+            history.push("/");
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            // alert('Click No')
+          }
+        }
+      ]
+    });
+  }
+
   return (userDetails && userDetails.length > 0 ?
     <div>
-      <h3>Users List</h3>
+      <Row
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Col>
+          <h3>Users List</h3>
+        </Col>
+        <Col>
+          <Button onClick={onLogOut} >Log out</Button>
+        </Col>
+      </Row>
+
       <ul>
         {usersList}
       </ul>
@@ -116,7 +155,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   userDetailsListRedux: (payload) => dispatch(userDetailsListAction(payload)),
   setSelectedUserActionRedux: (payload) => dispatch(setSelectedUserAction(payload)),
-  setIsNewUserFormActionRedux: (payload) => dispatch(setIsNewUserFormAction(payload))
+  setIsNewUserFormActionRedux: (payload) => dispatch(setIsNewUserFormAction(payload)),
+  loginActionRedux: (payload) => dispatch(loginAction(payload))
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShowDetails));

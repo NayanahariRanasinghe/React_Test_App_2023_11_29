@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Button } from 'react-bootstrap';
 import { withRouter, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,connect } from "react-redux";
 import { loginAction } from '../../redux/actions/login_action';
 import { userDetailsListAction } from '../../redux/actions/user_details_action';
 
-function Login() {
+function Login(props) {
   const history = useHistory();
   const dispatch = useDispatch()
   const [username, setUserName] = useState(null);
@@ -13,6 +13,12 @@ function Login() {
   const [userLoginStatus, setUserLoginStatus] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [errorMsgShow, setErrorMsgShow] = useState(false);
+
+
+  useEffect(()=>{
+    console.log('login:-',props.loginReducer.signinDetails);
+    
+  },[props.loginReducer])
 
   const checkUserName = (value) => {
     let bool = false;
@@ -138,4 +144,16 @@ function Login() {
   )
 }
 
-export default withRouter(Login);
+// export default withRouter(Login);
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+// const mapDispatchToProps = dispatch => ({
+//   userDetailsListRedux: (payload) => dispatch(userDetailsListAction(payload)),
+//   setSelectedUserActionRedux: (payload) => dispatch(setSelectedUserAction(payload)),
+//   setIsNewUserFormActionRedux: (payload) => dispatch(setIsNewUserFormAction(payload))
+// });
+
+export default withRouter(connect(mapStateToProps)(Login));

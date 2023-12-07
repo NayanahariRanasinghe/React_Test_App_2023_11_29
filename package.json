@@ -10,15 +10,16 @@
     "moment": "^2.29.4",
     "react": "^17.0.1",
     "react-bootstrap": "^1.6.6",
+    "react-confirm-alert": "^2.7.0",
     "react-datepicker": "^4.23.0",
     "react-dom": "^17.0.1",
     "react-moment": "^1.1.3",
     "react-redux": "^7.2.2",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.3",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
     "web-vitals": "^1.1.0"
   },
   "scripts": {

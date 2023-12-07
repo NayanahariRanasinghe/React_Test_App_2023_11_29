@@ -6,7 +6,7 @@ import userDetailsReducer from './userDetailsReducer';
 import { SIGNOUT_SET } from '../constants/loginTypes';
 
 const appReducer = combineReducers({
-  signState: loginReducer,
+  loginReducer: loginReducer,
   userDetailsReducer:userDetailsReducer
 });
 
