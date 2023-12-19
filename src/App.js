@@ -6,11 +6,17 @@ import { connect } from "react-redux";
 import Login from './components/login/Login';
 import ShowDetails from './components/showDetails/ShowDetails';
 import AddDetailsForm from './components/forms/AddDetailsForm';
+import { loginAction } from './redux/actions/login_action';
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount=()=>{
+    console.log('this.props.loginReducer.signinDetails:-',this.props.loginReducer.signinDetails);
+    // this.props.loginActionRedux(false);
   }
 
   render() {
@@ -36,4 +42,8 @@ const mapStateToProps = state => ({
   ...state
 });
 
-export default withRouter(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => ({
+  loginActionRedux: (payload) => dispatch(loginAction(payload))
+});
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(App));
