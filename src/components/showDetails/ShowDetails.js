@@ -108,43 +108,46 @@ function ShowDetails(props) {
     });
   }
 
-  return (userDetails && userDetails.length > 0 ?
-    <div>
-      <Row
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between'
-        }}
-      >
-        <Col>
-          <h3>Users List</h3>
-        </Col>
-        <Col>
-          <Button onClick={onLogOut} >Log out</Button>
-        </Col>
-      </Row>
-
-      <ul>
-        {usersList}
-      </ul>
-      <Row
-        style={{
-          paddingTop: 10,
-          paddingBottom: 10,
-          display: 'flex'
-        }}
-      >
-        <Col
+  return (<>
+    <Col>
+      <Button onClick={onLogOut} >Log out</Button>
+    </Col>
+    {userDetails && userDetails.length > 0 ?
+      <div>
+        <Row
           style={{
-            marginRight: 10,
-            marginLeft: 10
+            display: 'flex',
+            justifyContent: 'space-between'
           }}
         >
-          <Button onClick={() => onClickHandle(true, null)}>Add New</Button>
-        </Col>
-      </Row>
-    </div>
-    : <></>
+          <Col>
+            <h3>Users List</h3>
+          </Col>
+        </Row>
+
+        <ul>
+          {usersList}
+        </ul>
+
+      </div>
+      : <></>}
+    <Row
+      style={{
+        paddingTop: 10,
+        paddingBottom: 10,
+        display: 'flex'
+      }}
+    >
+      <Col
+        style={{
+          marginRight: 10,
+          marginLeft: 10
+        }}
+      >
+        <Button onClick={() => onClickHandle(true, null)}>Add New</Button>
+      </Col>
+    </Row>
+  </>
   )
 }
 

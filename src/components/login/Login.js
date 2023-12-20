@@ -51,30 +51,31 @@ function Login(props) {
         dispatch(loginAction(true));
         setErrorMsgShow(false);
         setErrorMsg(null);
-        dispatch(userDetailsListAction(
-          [
-            {
-              id: 0,
-              details: [
-                { id: 1, title: 'FirstName', value: 'Amar' },
-                { id: 2, title: 'Last Name', value: 'Perera' },
-                { id: 3, title: 'Date of Birth', value: '1995-02-01' },
-                { id: 4, title: 'Age', value: '28' },
-                {
-                  id: 5, title: 'Language', value: [
-                    { id: 1, value: 'English', selected: true },
-                    { id: 2, value: 'Sinhala', selected: true },
-                    { id: 3, value: 'Tamil', selected: false }
-                  ]
-                },
-                { id: 6, title: 'Gender', value: 'Male' },
-                { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
-                { id: 8, title: 'Telephone', value: '0710000000' }
-              ]
-            }
-          ]
-        ));
+        // dispatch(userDetailsListAction(
+        //   [
+        //     {
+        //       id: 0,
+        //       details: [
+        //         { id: 1, title: 'FirstName', value: 'Amar' },
+        //         { id: 2, title: 'Last Name', value: 'Perera' },
+        //         { id: 3, title: 'Date of Birth', value: '1995-02-01' },
+        //         { id: 4, title: 'Age', value: '28' },
+        //         {
+        //           id: 5, title: 'Language', value: [
+        //             { id: 1, value: 'English', selected: true },
+        //             { id: 2, value: 'Sinhala', selected: true },
+        //             { id: 3, value: 'Tamil', selected: false }
+        //           ]
+        //         },
+        //         { id: 6, title: 'Gender', value: 'Male' },
+        //         { id: 7, title: 'Email', value: 'Amar1995@gmail.com' },
+        //         { id: 8, title: 'Telephone', value: '0710000000' }
+        //       ]
+        //     }
+        //   ]
+        // ));
         // history.push("/ShowDetails");
+        dispatch(userDetailsListAction([]));
       }
       else {
         setUserLoginStatus(false);
