@@ -7,6 +7,7 @@ import Login from './components/login/Login';
 import ShowDetails from './components/showDetails/ShowDetails';
 import AddDetailsForm from './components/forms/AddDetailsForm';
 import { loginAction } from './redux/actions/login_action';
+import NavbarTop from './components/common_layouts/NavbarTop';
 
 class App extends React.Component {
 
@@ -14,24 +15,21 @@ class App extends React.Component {
     super(props);
   }
 
-  componentDidMount=()=>{
-    console.log('this.props.loginReducer.signinDetails:-',this.props.loginReducer.signinDetails);
+  componentDidMount = () => {
+    console.log('this.props.loginReducer.signinDetails:-', this.props.loginReducer.signinDetails);
     // this.props.loginActionRedux(false);
   }
 
   render() {
     return (
-      <Switch>
-        <Route path="/AddDetailsForm" exact><AddDetailsForm /></Route>
-        {/* {this.props.loginReducer.signinDetails ?
+      <div>
+      <NavbarTop/>
+        <Switch>
+          <Route path="/AddDetailsForm" exact><AddDetailsForm /></Route>
           <Route path="/ShowDetails" exact><ShowDetails /></Route>
-          :
-          <> */}
-            <Route path="/ShowDetails" exact><ShowDetails /></Route>
-            <Route path="/" exact><Login /></Route>
-          {/* </>
-        } */}
-      </Switch>
+          <Route path="/" exact><Login /></Route>
+        </Switch>
+      </div>
     );
   }
 }
@@ -46,4 +44,4 @@ const mapDispatchToProps = dispatch => ({
   loginActionRedux: (payload) => dispatch(loginAction(payload))
 });
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

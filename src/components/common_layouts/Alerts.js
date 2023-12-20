@@ -1,5 +1,5 @@
 import React from 'react';
-import { alertService, alertType } from '../../_services/alert.service';
+import { alertService,alertType } from '../../services/alert.service';
 
 export default class Alerts extends React.Component{
     constructor(props) {

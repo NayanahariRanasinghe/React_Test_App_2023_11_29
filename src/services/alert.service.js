@@ -45,6 +45,7 @@ function warn(message) {
 }
 
 function alert(alert) {
+    console.log('alert ++++++++++++++++++++');
     alert.id = alert.id || defaultId;
     alertSubject.next(alert);
 }

@@ -11,6 +11,7 @@ import { validateEmailAddress } from '../../validations/emailValidation';
 import CutomInputField from '../elements/CutomInputField';
 import CustomCheckboxField from '../elements/CustomCheckboxField';
 import CustomRadioField from '../elements/CustomRadioField';
+import { alertService } from '../../services/alert.service';
 
 const formSyles = {
   rowStyle: {
@@ -272,7 +273,8 @@ function AddDetailsForm(props) {
       checkAllString(email) &&
       checkAllString(phoneNumber)
     ) {
-      console.log('-------------------')
+      console.log('-------------------');
+      alertService.success("Successfully ----------------");
       setDetailsToRedux();
       history.push('/ShowDetails');
       setIsfillAllFeildError(false);
