@@ -234,6 +234,7 @@ function AddDetailsForm(props) {
           details: userDetailsToPass
         }
         newList.push(obj);
+      alertService.success("Successfully Added");
       }
       else {
         if (newList && newList.length > 0) {
@@ -243,6 +244,7 @@ function AddDetailsForm(props) {
               console.log('------newList ', newList);
             }
           }
+          alertService.success("Successfully Updated");
         }
       }
       props.userDetailsListRedux(newList);
@@ -274,7 +276,6 @@ function AddDetailsForm(props) {
       checkAllString(phoneNumber)
     ) {
       console.log('-------------------');
-      alertService.success("Successfully ----------------");
       setDetailsToRedux();
       history.push('/ShowDetails');
       setIsfillAllFeildError(false);
