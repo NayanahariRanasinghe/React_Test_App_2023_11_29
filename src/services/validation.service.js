@@ -8,9 +8,9 @@ export const validationService = {
 };
 
 function onModal() {
-    return modalSubject.asObservable();
+    return validationSubject.asObservable();
 }
 
 function modal(mid) {
-    modalSubject.next(mid);
+    validationSubject.next(mid);
 }

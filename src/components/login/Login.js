@@ -17,8 +17,10 @@ function Login(props) {
 
   useEffect(()=>{
     console.log('login:-',props.loginReducer.signinDetails);
-    
-  },[props.loginReducer])
+    if(props.loginReducer.signinDetails){
+      history.push('/ShowDetails');
+    }
+  },[props.loginReducer]);
 
   const checkUserName = (value) => {
     let bool = false;

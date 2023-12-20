@@ -23,14 +23,14 @@ class App extends React.Component {
     return (
       <Switch>
         <Route path="/AddDetailsForm" exact><AddDetailsForm /></Route>
-        {this.props.loginReducer.signinDetails ?
+        {/* {this.props.loginReducer.signinDetails ?
           <Route path="/ShowDetails" exact><ShowDetails /></Route>
           :
-          <>
+          <> */}
             <Route path="/ShowDetails" exact><ShowDetails /></Route>
             <Route path="/" exact><Login /></Route>
-          </>
-        }
+          {/* </>
+        } */}
       </Switch>
     );
   }
